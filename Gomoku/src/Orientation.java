@@ -1,0 +1,4 @@
+
+public enum Orientation {
+	LINE, COLUMN, ASCENDANT_DIAGONAL, DESCENDANT_DIAGONAL;
+}
