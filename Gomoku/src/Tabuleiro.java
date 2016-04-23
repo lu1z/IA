@@ -11,7 +11,16 @@ import javax.swing.JFrame;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.UndirectedGraph;
-
+/*
+ * H = jogada sendo avaliada
+ * X = jogada comp
+ * Y = jogada huma
+ * Z = vazio
+ * 
+ * HUMA		2^9		2^10	2^1		2^11	2^12	2^13	2^14	2^15	2^16	2^17
+ * 		|	X	|	X	|	X	|	X	|	H	|	X	|	X	|	X	|	X	|	X	|
+ * COMP		2^0		2^1		2^2		2^3		2^4		2^5		2^6		2^7		2^8		2^9
+ */
 public class Tabuleiro extends JFrame implements ActionListener {
 	
 	public static final int TAMANHO = 15;
@@ -22,6 +31,7 @@ public class Tabuleiro extends JFrame implements ActionListener {
 	Tile[][] board;
 	
 	SnapShoot g;
+	Tile nullTile;
 	
 	public Tabuleiro() {
 		Container cp = this.getContentPane();
@@ -60,6 +70,8 @@ public class Tabuleiro extends JFrame implements ActionListener {
 	private void snapShoot() {
 		// TODO Auto-generated method stub
 		g = new SnapShoot(Link.class);
+		nullTile = new Tile(-1 , -1, null);
+		g.addVertex(nullTile);
 	}
 
 	private boolean vez = true;
@@ -97,6 +109,8 @@ public class Tabuleiro extends JFrame implements ActionListener {
 		
 		Tile evaluating = board[linha][coluna];
 		g.addVertex(evaluating);
+		
+		g.addEdge(evaluating, nullTile , new Link(null, HeuristicUtil.bitPower[4]));
 		
 		Tile iterating;
 		
@@ -144,63 +158,51 @@ public class Tabuleiro extends JFrame implements ActionListener {
 			}
 		}
 		
-		System.out.println(g.toString());
+		//System.out.println(g.toString());
+		winTest(evaluating);
 	}
 
-	private boolean makeEdge(Tile evaluating, Tile iterating, Orientation orientation, int distance) {
-		if(iterating.getPiece().equals(Piece.UNAVALIABLE))
+	private boolean makeEdge(Tile evaluating, Tile iterating, Orientation orientation, int relativePosition) {
+		if(iterating.getPiece().equals(Piece.UNAVALIABLE)) {
+			g.addEdge(evaluating, nullTile, new Link(orientation, HeuristicUtil.bitPower[13 + relativePosition]));
 			return false;
+		}
 		if(iterating.getPiece().equals(Piece.EMPTY))
 			return true;
 		if(evaluating.getPiece().equals(iterating.getPiece())) {
-			g.addEdge(evaluating, iterating, new Link(orientation, distance));
+			g.addEdge(evaluating, iterating, new Link(orientation, HeuristicUtil.bitPower[4 + relativePosition]));
 			return true;
 		}
+		else
+			g.addEdge(evaluating, iterating, new Link(orientation, HeuristicUtil.bitPower[13 + relativePosition]));
 		return false;
 	}
 	
 	private boolean winTest(Tile evaluating) {
 		int heuristicValue = 0;
 		for(Orientation orientation : Orientation.values()) {
-			int positives = 0;
-			int negatives = 0;
-			for(Link edge : g.getEdgesWith(orientation)) {
-				if(edge.weigth > 0)
-					positives += edge.weigth;
-				else
-					negatives += edge.weigth;
-			}
-			heuristicValue = heuristicIt(positives, negatives);
-			if(heuristicValue == 15 || heuristicValue == -15)
-				return true;
+			int sumPositions = 0;
+			for(Link edge : g.getEdgesWith(evaluating, orientation))
+				sumPositions += edge.weigth;
+			heuristicValue += heuristicIt(sumPositions);
+			
+			System.out.println(sumPositions + "       " + heuristicValue);
 		}
-		
 		return false;
 	}
 	
-	private int heuristicIt(int positives, int negatives) {
-		
-		switch(positives) {
-			case 15 :
-				return +quintupla;
-			case 14 :
-				break;
-			case 13 :
-				return +dupla;
-			case 12 :
-				break;
-			case 11 :
-				return +
-			case 10 :
-			case 9 :
-			case 8 :
-			case 7 :
-			case 6 :
-			case 5 :
-			case 4 :
-			case 3 :
-			case 2 :
-			case 1 :
+	private int heuristicIt(int positions) {
+		int evaluating = 0;
+		int maskRedundancy = 0;
+		for(Mask mask : Mask.values()) {
+			for(int i = mask.spatialRedundancy; i >= 0 ; i--) {
+				maskRedundancy = mask.mask << i;
+				evaluating = positions & maskRedundancy;
+				evaluating = evaluating >> i;
+				if(evaluating == mask.value)
+					return mask.heuristic;
+			}
 		}
+		return 0;
 	}
 }

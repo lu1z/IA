@@ -16,10 +16,10 @@ public class SnapShoot extends SimpleGraph<Tile, Link> {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public List<Link> getEdgesWith(Orientation orientation) {
+	public List<Link> getEdgesWith(Tile evaluating, Orientation orientation) {
 		List edgesWith = new ArrayList<Link>();
-		for(Link edge : this.edgeSet()) {
-			if(edge.orientation.equals(orientation))
+		for(Link edge : this.edgesOf(evaluating)) {
+			if(edge.orientation == null ||  orientation.equals(edge.orientation))
 				edgesWith.add(edge);
 		}
 		return edgesWith;
