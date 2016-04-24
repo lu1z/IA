@@ -10,6 +10,4 @@ public class Link extends DefaultEdge {
 		this.orientation = orientation;
 		this.weigth = distance;
 	}
-
-	
 }

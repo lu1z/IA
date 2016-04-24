@@ -21,7 +21,7 @@ import org.jgrapht.UndirectedGraph;
  * 		|	X	|	X	|	X	|	X	|	H	|	X	|	X	|	X	|	X	|	X	|
  * COMP		2^0		2^1		2^2		2^3		2^4		2^5		2^6		2^7		2^8		2^9
  */
-public class Tabuleiro extends JFrame implements ActionListener {
+public class Board extends JFrame implements ActionListener {
 	
 	public static final int TAMANHO = 15;
 	public static final int ESPACAMENTO = 1;
@@ -33,7 +33,7 @@ public class Tabuleiro extends JFrame implements ActionListener {
 	SnapShoot g;
 	Tile nullTile;
 	
-	public Tabuleiro() {
+	public Board() {
 		Container cp = this.getContentPane();
 		cp.setLayout(new GridLayout(TAMANHO, TAMANHO, ESPACAMENTO, ESPACAMENTO));
 		cp.setBackground(Color.GREEN);
@@ -64,7 +64,7 @@ public class Tabuleiro extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String... args) {
-		new Tabuleiro().snapShoot();
+		new Board().snapShoot();
 	}
 
 	private void snapShoot() {

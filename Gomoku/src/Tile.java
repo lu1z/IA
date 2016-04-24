@@ -1,4 +1,6 @@
 public class Tile {
+	public static final Tile nullTile = new Tile(-1, -1, Piece.UNAVALIABLE);
+	
 	private int line;
 	private int column;
 	private Piece piece;
