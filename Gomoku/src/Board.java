@@ -3,15 +3,9 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.UndirectedGraph;
 
 /*
  * H = jogada sendo avaliada
@@ -57,7 +51,7 @@ public class Board extends JFrame implements ActionListener {
 		setTitle("Gomoku");
 		setSize(496, 489);
 		setVisible(true);
-		board = new Tile[17][17];
+		this.board = new Tile[17][17];
 		for (int i = 0; i < 17; i++)
 			for (int j = 0; j < 17; j++)
 				if ((i == 0 || j == 0) || (i == 16 || j == 16))
@@ -73,8 +67,8 @@ public class Board extends JFrame implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		JButton peca = (JButton) arg0.getSource();
+	public void actionPerformed(ActionEvent action) {
+		JButton peca = (JButton) action.getSource();
 		// Se a cor do botão for branca ou preta, não jogar por cima
 		if (peca.getBackground() == Color.WHITE || peca.getBackground() == Color.BLACK)
 			return;
@@ -84,11 +78,10 @@ public class Board extends JFrame implements ActionListener {
 
 		if (peca.getBackground() == Color.GRAY)
 			jogar(linha, coluna, false);
-		// vez = !vez;
 
 		// aqui é calulado a vez do PC
 		MinMax m = new MinMax(this);
-		int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		int[] jogada = m.minMax(true, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
 		jogar(jogada[1], jogada[2], true);
 
 	}

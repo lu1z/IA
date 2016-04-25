@@ -2,8 +2,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgrapht.*;
-import org.jgrapht.graph.*;
+import org.jgrapht.EdgeFactory;
+import org.jgrapht.graph.SimpleGraph;
 
 public class Snapshot extends SimpleGraph<Tile, Link> {
 

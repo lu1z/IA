@@ -1,14 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
-
 public class MinMax {
 	// SimpleDirectedGraph<Integer, Tile> playTree;
 
 	Board b;
-	Tile bestMove = null;
 
 	public MinMax(Board b) {
 		// playTree = new SimpleDirectedGraph<>(Tile.class);
@@ -18,13 +14,14 @@ public class MinMax {
 
 	public int[] minMax(boolean player, int depth, int alpha, int beta) {
 		List<Tile> nextMoves = generateMoves();
+
 		int heuristicSum;
-		if (bestMove == null) {
-			bestMove = nextMoves.get(0);
-		}
+		int bestRow = -1;
+		int bestCol = -1;
+
 		if (nextMoves.isEmpty() || depth == 0) {
 			heuristicSum = b.getGHeuristic();
-			return new int[] { heuristicSum, bestMove.getLine(), bestMove.getColumn() };
+			return new int[] { heuristicSum, bestRow, bestCol };
 		} else {
 			for (Tile move : nextMoves) {
 				// try this move for the current "player"
@@ -33,13 +30,15 @@ public class MinMax {
 					heuristicSum = minMax(!player, depth - 1, alpha, beta)[0];
 					if (heuristicSum > alpha) {
 						alpha = heuristicSum;
-						bestMove = move;
+						bestRow = move.getLine();
+						bestCol = move.getColumn();
 					}
 				} else { // oppSeed is minimizing player
 					heuristicSum = minMax(!player, depth - 1, alpha, beta)[0];
 					if (heuristicSum < beta) {
 						beta = heuristicSum;
-						bestMove = move;
+						bestRow = move.getLine();
+						bestCol = move.getColumn();
 					}
 				}
 				// undo move
@@ -48,7 +47,7 @@ public class MinMax {
 				if (alpha >= beta)
 					break;
 			}
-			return new int[] { player ? alpha : beta, bestMove.getLine(), bestMove.getColumn() };
+			return new int[] { player ? alpha : beta, bestRow, bestCol };
 		}
 	}
 
