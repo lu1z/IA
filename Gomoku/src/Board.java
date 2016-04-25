@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /*
  * H = jogada sendo avaliada
@@ -58,17 +59,21 @@ public class Board extends JFrame implements ActionListener {
 					board[i][j] = new Tile(i, j, Piece.UNAVALIABLE);
 				else
 					board[i][j] = new Tile(i, j, Piece.EMPTY);
-
 	}
 
 	public void start() {
 		g = new Snapshot(Link.class);
 		g.addVertex(nullTile);
+		jogar(8, 8, true, true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		JButton peca = (JButton) action.getSource();
+		play(peca);
+	}
+
+	public void play(JButton peca) {
 		// Se a cor do botão for branca ou preta, não jogar por cima
 		if (peca.getBackground() == Color.WHITE || peca.getBackground() == Color.BLACK)
 			return;
@@ -77,29 +82,35 @@ public class Board extends JFrame implements ActionListener {
 		int coluna = Integer.valueOf(position[1]);
 
 		if (peca.getBackground() == Color.GRAY)
-			jogar(linha, coluna, false);
+			jogar(linha, coluna, false, true);
 
 		// aqui é calulado a vez do PC
 		MinMax m = new MinMax(this);
-		int[] jogada = m.minMax(true, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
-		jogar(jogada[1], jogada[2], true);
+		int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		jogar(jogada[1], jogada[2], true, true);
 
+		if (computerGHeuristic > 100000) {
+			JOptionPane.showMessageDialog(this, "Perdeu!");
+			this.dispose();
+			Main.main();
+		} else if (humanGHeuristic > 100000) {
+			JOptionPane.showMessageDialog(this, "WINWIN!");
+			this.dispose();
+			Main.main();
+		}
 	}
 
-	public void jogar(int linha, int coluna, boolean player) {
-		JButton peca = (JButton) this.getContentPane().getComponent((linha * 15) - (16 - coluna));
-		Piece piece;
+	public void jogar(int linha, int coluna, boolean computer) {
+		jogar(linha, coluna, computer, false);
+	}
 
-		if (player) {
-			peca.setBackground(Color.BLACK);
-			piece = Piece.BLACK;
-		} else {
-			peca.setBackground(Color.WHITE);
-			piece = Piece.WHITE;
+	public void jogar(int linha, int coluna, boolean computer, boolean setBg) {
+		if (setBg) {
+			JButton peca = (JButton) this.getContentPane().getComponent((linha * 15) - (16 - coluna));
+			peca.setBackground(computer ? Color.BLACK : Color.WHITE);
 		}
-
 		Tile evaluating = board[linha][coluna];
-		evaluating.setPiece(piece);
+		evaluating.setPiece(computer ? Piece.BLACK : Piece.WHITE);
 		g.addVertex(evaluating);
 		g.addEdge(evaluating, nullTile, new Link(null, HeuristicUtil.bitPower[4]));
 
@@ -149,7 +160,7 @@ public class Board extends JFrame implements ActionListener {
 			}
 		}
 
-		if (player) {
+		if (computer) {
 			computerGHeuristic += heuristic(evaluating);
 		} else {
 			humanGHeuristic += heuristic(evaluating);
@@ -179,8 +190,6 @@ public class Board extends JFrame implements ActionListener {
 			for (Link edge : g.getEdgesWith(evaluating, orientation))
 				sumPositions += edge.weigth;
 			heuristicValue += heuristicIt(sumPositions);
-
-			// System.out.println(sumPositions + " " + heuristicValue);
 		}
 		return heuristicValue;
 	}
@@ -193,9 +202,9 @@ public class Board extends JFrame implements ActionListener {
 				maskRedundancy = mask.mask << i;
 				evaluating = positions & maskRedundancy;
 				evaluating = evaluating >> i;
-				if (mask.equals(Mask.XXXXX) && evaluating == mask.value) {
-					System.out.println("venceu ou quase venceu");
-				}
+				// if (mask.equals(Mask.XXXXX) && evaluating == mask.value) {
+				// System.out.println("venceu ou quase venceu");
+				// }
 				if (evaluating == mask.value)
 					return mask.heuristic;
 			}
@@ -204,7 +213,6 @@ public class Board extends JFrame implements ActionListener {
 	}
 
 	public int getGHeuristic() {
-		// TODO Auto-generated method stub
 		return gHeuristic;
 	}
 
