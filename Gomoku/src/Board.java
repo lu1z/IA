@@ -28,10 +28,14 @@ public class Board extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
-	Tile[][] board;
+	public Tile[][] board;
 	
 	SnapShoot g;
 	Tile nullTile;
+	
+	int gHeuristic;
+	int computerGHeuristic;
+	int humanGHeuristic;
 	
 	public Board() {
 		Container cp = this.getContentPane();
@@ -85,16 +89,21 @@ public class Board extends JFrame implements ActionListener {
 		int coluna = Integer.valueOf(position[1]);
 		
 		if(peca.getBackground() == Color.GRAY) {
-			jogar(linha, coluna);
+			jogar(linha, coluna, false);
 		}
+		//vez = !vez;
+		MinMax m = new MinMax(this, gHeuristic);
+		int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		jogar(jogada[1], jogada[2], true);
+
 	}
 	
-	public void jogar(int linha, int coluna) {
+	public void jogar(int linha, int coluna, boolean player) {
 		JButton peca = (JButton)this.getContentPane().getComponent((linha * 15) - (16 - coluna));
 		
 		Piece piece;
 		
-		if(vez) {
+		if(player) {
 			peca.setBackground(Color.BLACK);
 			piece = Piece.BLACK;
 		}
@@ -102,8 +111,6 @@ public class Board extends JFrame implements ActionListener {
 			peca.setBackground(Color.WHITE);
 			piece = Piece.WHITE;
 		}
-		vez = !vez;
-		
 		
 		board[linha][coluna].setPiece(piece);
 		
@@ -158,8 +165,13 @@ public class Board extends JFrame implements ActionListener {
 			}
 		}
 		
-		//System.out.println(g.toString());
-		winTest(evaluating);
+
+		if(player) {
+			computerGHeuristic += heuristic(evaluating);
+		} else {
+			humanGHeuristic += heuristic(evaluating);
+		}
+		gHeuristic = computerGHeuristic - humanGHeuristic;
 	}
 
 	private boolean makeEdge(Tile evaluating, Tile iterating, Orientation orientation, int relativePosition) {
@@ -178,7 +190,7 @@ public class Board extends JFrame implements ActionListener {
 		return false;
 	}
 	
-	private boolean winTest(Tile evaluating) {
+	public int heuristic(Tile evaluating) {
 		int heuristicValue = 0;
 		for(Orientation orientation : Orientation.values()) {
 			int sumPositions = 0;
@@ -186,9 +198,9 @@ public class Board extends JFrame implements ActionListener {
 				sumPositions += edge.weigth;
 			heuristicValue += heuristicIt(sumPositions);
 			
-			System.out.println(sumPositions + "       " + heuristicValue);
+			//System.out.println(sumPositions + "       " + heuristicValue);
 		}
-		return false;
+		return heuristicValue;
 	}
 	
 	private int heuristicIt(int positions) {
@@ -199,10 +211,25 @@ public class Board extends JFrame implements ActionListener {
 				maskRedundancy = mask.mask << i;
 				evaluating = positions & maskRedundancy;
 				evaluating = evaluating >> i;
+				if(mask.equals(Mask.XXXXX) && evaluating == mask.value) {
+					System.out.println("venceu");
+				}
 				if(evaluating == mask.value)
 					return mask.heuristic;
 			}
 		}
 		return 0;
+	}
+
+	public int getGHeuristic() {
+		// TODO Auto-generated method stub
+		return gHeuristic;
+	}
+
+	public void desjogar(int line, int column) {
+		JButton peca = (JButton)this.getContentPane().getComponent((line * 15) - (16 - column));
+		peca.setBackground(Color.GRAY);
+		g.removeVertex(board[line][column]);
+		board[line][column].setPiece(Piece.EMPTY);
 	}
 }

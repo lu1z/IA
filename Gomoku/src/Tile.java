@@ -3,6 +3,14 @@ public class Tile {
 	
 	private int line;
 	private int column;
+	public int getLine() {
+		return line;
+	}
+
+	public int getColumn() {
+		return column;
+	}
+
 	private Piece piece;
 	
 	public Tile(int line, int column, Piece piece) {
