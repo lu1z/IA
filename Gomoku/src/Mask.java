@@ -31,95 +31,95 @@ public enum Mask {
 	XXXXX(HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],		//(2^0 + 2^1 + 2^2 + 2^3 + 2^4)
 			HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			4,
-			HeuristicUtil.weight[6]),
+			100000),
 	ZXXXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^2 + 2^3 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			3,
-			HeuristicUtil.weight[6]),
+			10000),
 	YXXXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^2 + 2^3 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			3,
-			HeuristicUtil.weight[6]),
+			5000),
 	ZXXXXY(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^2 + 2^3 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],
 			3,
-			HeuristicUtil.weight[6]),
+			5000),
 	XXZXX(HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[11] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4], //(2^0 + 2^1 + 2^11 + 2^3 + 2^4)
 			HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			4,
-			HeuristicUtil.weight[6]),
+			5000),
 	XXXZX(HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12] + HeuristicUtil.bitPower[4],	//(2^0 + 2^1 + 2^2 + 2^12 + 2^4)
 			HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			4,
-			HeuristicUtil.weight[6]),
+			5000),
 	XZXXX(HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[10] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],	//(2^0 + 2^10 + 2^2 + 2^3 + 2^4)
 			HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			4,
-			HeuristicUtil.weight[6]),
+			5000),
 	ZXXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],	//(2^9 + 2^1 + 2^2 + 2^3 + 2^13)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3],
 			4,
-			HeuristicUtil.weight[6]),
+			900),
 	YXXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],	//(2^9 + 2^1 + 2^2 + 2^3 + 2^13)
 			HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3],
 			4,
-			HeuristicUtil.weight[6]),
+			700),
 	ZXXXY(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],	//(2^9 + 2^1 + 2^2 + 2^3 + 2^13)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],
 			4,
-			HeuristicUtil.weight[6]),
+			700),
 	YXXZXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^2 + 2^12 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[4],
 			3,
-			HeuristicUtil.weight[6]),
+			700),
 	ZXXZXY(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^2 + 2^12 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],
 			3,
-			HeuristicUtil.weight[6]),
+			700),
 	ZXXZXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^2 + 2^12 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[4],
 			3,
-			HeuristicUtil.weight[6]),
+			700),
 	ZXZXXY(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[11] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^11 + 2^3 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],
 			3,
-			HeuristicUtil.weight[6]),
+			700),
 	YXZXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[11] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^11 + 2^3 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			3,
-			HeuristicUtil.weight[6]),
+			700),
 	ZXZXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[11] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4] + HeuristicUtil.bitPower[14],	//(2^9 + 2^1 + 2^11 + 2^3 + 2^4 + 2^14)
 			HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[4],
 			3,
-			HeuristicUtil.weight[6]),
+			700),
 	ZXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12],	//(2^9 + 2^1 + 2^2 + 2^12)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2],
 			5,
-			HeuristicUtil.weight[6]),
+			90),
 	YXXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12],	//(2^9 + 2^1 + 2^2 + 2^12)
 			HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2],
 			5,
-			HeuristicUtil.weight[6]),
+			40),
 	ZXXY(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12],	//(2^9 + 2^1 + 2^2 + 2^12)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[2] +  HeuristicUtil.bitPower[12],
 			5,
-			HeuristicUtil.weight[6]),
+			40),
 	ZXZXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[11] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],	//(2^9 + 2^1 + 2^11 + 2^3 + 2^13)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3],
 			4,
-			HeuristicUtil.weight[6]),
+			40),
 	YXZXZ(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[11] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],	//(2^9 + 2^1 + 2^11 + 2^3 + 2^13)
 			HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3],
 			4,
-			HeuristicUtil.weight[6]),
+			30),
 	ZXZXY(HeuristicUtil.bitPower[9] + HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[11] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],	//(2^9 + 2^1 + 2^11 + 2^3 + 2^13)
 			HeuristicUtil.bitPower[1] + HeuristicUtil.bitPower[3] + HeuristicUtil.bitPower[13],
 			4,
-			HeuristicUtil.weight[6]),
+			30),
 	XZXZX(HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[10] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[12] + HeuristicUtil.bitPower[4],	//(2^0 + 2^10 + 2^2 + 2^12 + 2^4)
 			HeuristicUtil.bitPower[0] + HeuristicUtil.bitPower[2] + HeuristicUtil.bitPower[4],
 			4,
-			HeuristicUtil.weight[6]);
+			10);
 	
 	int mask;
 	int value;

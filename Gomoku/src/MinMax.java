@@ -8,20 +8,23 @@ public class MinMax {
 	//SimpleDirectedGraph<Integer, Tile> playTree;
 	
 	Board b;
-	int heuristicSum;
+	Tile bestMove = null;
 	
-	public MinMax(Board b, int heuristicSum) {
+	public MinMax(Board b) {
 		//playTree = new SimpleDirectedGraph<>(Tile.class);
 		//playTree.addVertex(gHeuristic);
 		this.b = b;
-		this.heuristicSum = heuristicSum;
 	}
 	
 	public int[] minMax(boolean player, int depth, int alpha, int beta) {
 		
 		List<Tile> nextMoves = generateMoves();
 		
-		Tile bestMove = nextMoves.get(0);
+		int heuristicSum;
+		
+		if(bestMove == null) {
+			bestMove = nextMoves.get(0);
+		}
 		
 		if(nextMoves.isEmpty() || depth == 0) {
 			heuristicSum = b.getGHeuristic();
@@ -61,7 +64,7 @@ public class MinMax {
 		return moves;
 	}
 
-	private Tile choseRandomPlay(boolean player) {
+	private Tile choseHeuristicPlay(boolean player) {
 		if(player)
 			return new Tile(5, 5, Piece.BLACK);
 		return null;

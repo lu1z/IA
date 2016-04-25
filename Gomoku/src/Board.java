@@ -92,7 +92,7 @@ public class Board extends JFrame implements ActionListener {
 			jogar(linha, coluna, false);
 		}
 		//vez = !vez;
-		MinMax m = new MinMax(this, gHeuristic);
+		MinMax m = new MinMax(this);
 		int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
 		jogar(jogada[1], jogada[2], true);
 
@@ -229,7 +229,15 @@ public class Board extends JFrame implements ActionListener {
 	public void desjogar(int line, int column) {
 		JButton peca = (JButton)this.getContentPane().getComponent((line * 15) - (16 - column));
 		peca.setBackground(Color.GRAY);
-		g.removeVertex(board[line][column]);
-		board[line][column].setPiece(Piece.EMPTY);
+		Tile evaluating = board[line][column];
+		if(evaluating.getPiece().equals(Piece.BLACK)) {
+			computerGHeuristic -= heuristic(evaluating);
+		} else {
+			humanGHeuristic -= heuristic(evaluating);
+		}
+		gHeuristic = computerGHeuristic - humanGHeuristic;
+		g.removeVertex(evaluating);
+		evaluating.setPiece(Piece.EMPTY);
+		
 	}
 }
