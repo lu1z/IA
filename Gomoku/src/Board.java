@@ -146,11 +146,13 @@ public class Board extends JFrame implements ActionListener {
 				}
 				jogar(jogada[1], jogada[2], true, true);
 				lastCPlay = board[jogada[1]][jogada[2]];
+
 				working = false;
 				time = System.currentTimeMillis() - time;
 				mTurnLabel.setText("Sua vez de jogar");
 				mTimeLabel.setText("Tempo: " + time + "ms");
 				mProgress.setVisible(false);
+				checkAndShowVictory();
 			}
 
 		}.execute();
@@ -161,6 +163,9 @@ public class Board extends JFrame implements ActionListener {
 		// jogar(jogada[1], jogada[2], true, true);
 		// lastCPlay = board[jogada[1]][jogada[2]];
 
+	}
+
+	private void checkAndShowVictory() {
 		if (computerGHeuristic > 100000) {
 			JOptionPane.showMessageDialog(this, "Perdeu!");
 			this.dispose();
