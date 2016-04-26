@@ -61,8 +61,12 @@ public class MinMax {
 	}
 
 	private Tile choseHeuristicPlay(boolean player) {
-		if (player)
-			return new Tile(5, 5, Piece.BLACK);
+		List<Tile> moves = new ArrayList();
+		for (int i = 1; i < 16; i++)
+			for (int j = 1; j < 16; j++)
+				if (b.board[i][j].getPiece().equals(Piece.EMPTY))
+					moves.add(b.board[i][j]);
+		return moves;
 		return null;
 	}
 

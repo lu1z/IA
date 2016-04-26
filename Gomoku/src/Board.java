@@ -22,6 +22,14 @@ public class Board extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	public static final int TAMANHO = 15;
+	public Tile getLastHplay() {
+		return lastHplay;
+	}
+
+	public Tile getLastCPlay() {
+		return lastCPlay;
+	}
+
 	public static final int ESPACAMENTO = 1;
 
 	public Tile[][] board;
@@ -32,6 +40,9 @@ public class Board extends JFrame implements ActionListener {
 	int gHeuristic;
 	int computerGHeuristic;
 	int humanGHeuristic;
+	
+	Tile lastHplay;
+	Tile lastCPlay;
 
 	public Board() {
 		Container cp = this.getContentPane();
@@ -81,13 +92,16 @@ public class Board extends JFrame implements ActionListener {
 		int linha = Integer.valueOf(position[0]);
 		int coluna = Integer.valueOf(position[1]);
 
-		if (peca.getBackground() == Color.GRAY)
+		if (peca.getBackground() == Color.GRAY) {
 			jogar(linha, coluna, false, true);
+			lastHplay = board[linha][coluna];
+		}
 
 		// aqui é calulado a vez do PC
 		MinMax m = new MinMax(this);
 		int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
 		jogar(jogada[1], jogada[2], true, true);
+		lastCPlay = board[jogada[1]][jogada[2]];
 
 		if (computerGHeuristic > 100000) {
 			JOptionPane.showMessageDialog(this, "Perdeu!");
