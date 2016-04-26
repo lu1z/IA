@@ -1,12 +1,18 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 
 /*
  * H = jogada sendo avaliada
@@ -20,18 +26,8 @@ import javax.swing.JOptionPane;
  */
 public class Board extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-
 	public static final int TAMANHO = 15;
-	public Tile getLastHplay() {
-		return lastHplay;
-	}
-
-	public Tile getLastCPlay() {
-		return lastCPlay;
-	}
-
 	public static final int ESPACAMENTO = 1;
-
 	public Tile[][] board;
 
 	Snapshot g;
@@ -40,13 +36,29 @@ public class Board extends JFrame implements ActionListener {
 	int gHeuristic;
 	int computerGHeuristic;
 	int humanGHeuristic;
-	
+
 	Tile lastHplay;
 	Tile lastCPlay;
 
+	private Container boardContainer;
+	private Label mTimeLabel = new Label();
+	private Label mTurnLabel = new Label("Sua vez de jogar");
+	private JProgressBar mProgress = new JProgressBar();
+
+	public Tile getLastHplay() {
+		return lastHplay;
+	}
+
+	public Tile getLastCPlay() {
+		return lastCPlay;
+	}
+
 	public Board() {
 		Container cp = this.getContentPane();
-		cp.setLayout(new GridLayout(TAMANHO, TAMANHO, ESPACAMENTO, ESPACAMENTO));
+		this.setResizable(false);
+		boardContainer = new Container();
+		boardContainer.setLayout(new GridLayout(TAMANHO, TAMANHO, ESPACAMENTO, ESPACAMENTO));
+		cp.add(boardContainer, BorderLayout.CENTER);
 		cp.setBackground(Color.GREEN);
 		for (int i = 1; i <= TAMANHO; i++) {
 			for (int j = 1; j <= TAMANHO; j++) {
@@ -56,7 +68,7 @@ public class Board extends JFrame implements ActionListener {
 				labelNome.setBackground(Color.GRAY);
 				labelNome.addActionListener(this);
 				labelNome.setVisible(true);
-				cp.add(nome, labelNome);
+				boardContainer.add(nome, labelNome);
 			}
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,6 +82,16 @@ public class Board extends JFrame implements ActionListener {
 					board[i][j] = new Tile(i, j, Piece.UNAVALIABLE);
 				else
 					board[i][j] = new Tile(i, j, Piece.EMPTY);
+
+		JPanel status = new JPanel();
+		status.setLayout(new GridLayout(1, 3));
+		status.add(mTimeLabel);
+		status.add(mTurnLabel);
+		mProgress.setIndeterminate(true);
+		mProgress.setVisible(false);
+		status.add(mProgress);
+		this.add(status, BorderLayout.SOUTH);
+		this.setLocationRelativeTo(null);
 	}
 
 	public void start() {
@@ -84,9 +106,11 @@ public class Board extends JFrame implements ActionListener {
 		play(peca);
 	}
 
+	boolean working;
+
 	public void play(JButton peca) {
 		// Se a cor do botão for branca ou preta, não jogar por cima
-		if (peca.getBackground() == Color.WHITE || peca.getBackground() == Color.BLACK)
+		if (peca.getBackground() == Color.WHITE || peca.getBackground() == Color.BLACK || working)
 			return;
 		String[] position = peca.getName().split("~");
 		int linha = Integer.valueOf(position[0]);
@@ -97,11 +121,45 @@ public class Board extends JFrame implements ActionListener {
 			lastHplay = board[linha][coluna];
 		}
 
-		// aqui é calulado a vez do PC
-		MinMax m = new MinMax(this);
-		int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
-		jogar(jogada[1], jogada[2], true, true);
-		lastCPlay = board[jogada[1]][jogada[2]];
+		this.mTurnLabel.setText("Vez do computador jogar");
+		this.mProgress.setVisible(true);
+		working = true;
+		new SwingWorker<int[], String>() {
+
+			private long time = 0l;
+
+			@Override
+			protected int[] doInBackground() throws Exception {
+				time = System.currentTimeMillis();
+				MinMax m = new MinMax(Board.this);
+				return m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			}
+
+			@Override
+			protected void done() {
+				super.done();
+				int[] jogada = new int[2];
+				try {
+					jogada = get();
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+				jogar(jogada[1], jogada[2], true, true);
+				lastCPlay = board[jogada[1]][jogada[2]];
+				working = false;
+				time = System.currentTimeMillis() - time;
+				mTurnLabel.setText("Sua vez de jogar");
+				mTimeLabel.setText("Tempo: " + time + "ms");
+				mProgress.setVisible(false);
+			}
+
+		}.execute();
+		// MinMax m = new MinMax(this);
+		// int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE,
+		// Integer.MAX_VALUE);
+
+		// jogar(jogada[1], jogada[2], true, true);
+		// lastCPlay = board[jogada[1]][jogada[2]];
 
 		if (computerGHeuristic > 100000) {
 			JOptionPane.showMessageDialog(this, "Perdeu!");
@@ -120,7 +178,7 @@ public class Board extends JFrame implements ActionListener {
 
 	public void jogar(int linha, int coluna, boolean computer, boolean setBg) {
 		if (setBg) {
-			JButton peca = (JButton) this.getContentPane().getComponent((linha * 15) - (16 - coluna));
+			JButton peca = (JButton) boardContainer.getComponent((linha * 15) - (16 - coluna));
 			peca.setBackground(computer ? Color.BLACK : Color.WHITE);
 		}
 		Tile evaluating = board[linha][coluna];
@@ -231,7 +289,7 @@ public class Board extends JFrame implements ActionListener {
 	}
 
 	public void desjogar(int line, int column) {
-		JButton peca = (JButton) this.getContentPane().getComponent((line * 15) - (16 - column));
+		JButton peca = (JButton) boardContainer.getComponent((line * 15) - (16 - column));
 		peca.setBackground(Color.GRAY);
 		Tile evaluating = board[line][column];
 		if (evaluating.getPiece().equals(Piece.BLACK)) {
