@@ -3,7 +3,6 @@ import java.util.List;
 
 public class MinMax {
 	// SimpleDirectedGraph<Integer, Tile> playTree;
-
 	Board b;
 
 	public MinMax(Board b) {
