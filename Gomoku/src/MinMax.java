@@ -2,13 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MinMax {
-	// SimpleDirectedGraph<Integer, Tile> playTree;
-
 	Board b;
 
 	public MinMax(Board b) {
-		// playTree = new SimpleDirectedGraph<>(Tile.class);
-		// playTree.addVertex(gHeuristic);
 		this.b = b;
 	}
 
@@ -51,30 +47,38 @@ public class MinMax {
 		}
 	}
 
-	private List<Tile> generateMoves(boolean player) {
-		List<Tile> moves = new ArrayList();
-		for (int i = 1; i < 16; i++)
-			for (int j = 1; j < 16; j++)
-				if (b.board[i][j].getPiece().equals(Piece.EMPTY))
-					moves.add(b.board[i][j]);
-		return moves;
-	}
-
 	private List<Tile> choseHeuristicPlays(boolean player) {
-		List<Tile> moves = new ArrayList();
+		List<Tile> moves = new ArrayList<>();
+		int lastLineComp = -1;
+		int lastColComp = -1;
+		int lastLineHum = -1;
+		int lastColHum = -1;
+
 		Tile lastCPlay = b.getLastCPlay();
 		Tile lastHPlay = b.getLastHplay();
 
+		if (lastCPlay != null) {
+			lastLineComp = lastCPlay.getLine();
+			lastColComp = lastCPlay.getColumn();
+		}
+		if (lastHPlay != null) {
+			lastLineHum = lastHPlay.getLine();
+			lastColHum = lastHPlay.getColumn();
+		}
+
 		for (int i = 1; i < 16; i++)
 			for (int j = 1; j < 16; j++) {
-				if (b.board[i][j].getPiece().equals(Piece.EMPTY) && lastCPlay != null && (lastCPlay.getLine() + 1 == i || lastCPlay.getLine() + -1 == i) && (lastCPlay.getColumn() + 1 == j || lastCPlay.getColumn() + -1 == j))
+				Piece piece = b.board[i][j].getPiece();
+				if (piece != Piece.EMPTY)
+					continue;
+				if (lastCPlay != null && (lastLineComp + 1 == i || lastLineComp - 1 == i)
+						&& (lastColComp + 1 == j || lastColComp - 1 == j))
+					moves.add(0, b.board[i][j]);
+				else if (lastHPlay != null && (lastLineHum + 1 == i || lastLineHum - 1 == i)
+						&& (lastColHum + 1 == j || lastColHum - 1 == j))
 					moves.add(0, b.board[i][j]);
 				else
-					if (b.board[i][j].getPiece().equals(Piece.EMPTY) && lastHPlay != null && (lastHPlay.getLine() + 1 == i || lastHPlay.getLine() + -1 == i) && (lastHPlay.getColumn() + 1 == j || lastHPlay.getColumn() + -1 == j))
-						moves.add(0, b.board[i][j]);
-					else
-						if(b.board[i][j].getPiece().equals(Piece.EMPTY))
-							moves.add(b.board[i][j]);
+					moves.add(b.board[i][j]);
 			}
 		return moves;
 	}

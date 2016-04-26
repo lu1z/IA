@@ -39,7 +39,7 @@ public class Board extends JFrame implements ActionListener {
 
 	Tile lastHplay;
 	Tile lastCPlay;
-	
+
 	int turno = 1;
 
 	private Container boardContainer;
@@ -96,10 +96,11 @@ public class Board extends JFrame implements ActionListener {
 		this.setLocationRelativeTo(null);
 	}
 
-	public void start() {
+	public void start(boolean computerStart) {
 		g = new Snapshot(Link.class);
 		g.addVertex(nullTile);
-		jogar(8, 8, true, true);
+		if (computerStart)
+			jogar(8, 8, true, true);
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public class Board extends JFrame implements ActionListener {
 			protected int[] doInBackground() throws Exception {
 				time = System.currentTimeMillis();
 				MinMax m = new MinMax(Board.this);
-				return m.minMax(true, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+				return m.minMax(true, getDepth(), Integer.MIN_VALUE, Integer.MAX_VALUE);
 			}
 
 			@Override
@@ -154,31 +155,38 @@ public class Board extends JFrame implements ActionListener {
 				working = false;
 				time = System.currentTimeMillis() - time;
 				mTurnLabel.setText("Sua vez de jogar");
-				mTimeLabel.setText("Tempo: " + time + "ms");
+				mTimeLabel.setText("(" + turno + ")" + " Tempo: " + time + "ms");
 				mProgress.setVisible(false);
 				checkAndShowVictory();
 			}
 
 		}.execute();
-		// MinMax m = new MinMax(this);
-		// int[] jogada = m.minMax(true, 3, Integer.MIN_VALUE,
-		// Integer.MAX_VALUE);
+	}
 
-		// jogar(jogada[1], jogada[2], true, true);
-		// lastCPlay = board[jogada[1]][jogada[2]];
-
+	private int getDepth() {
+		int i = 0;
+		if (turno <= 16)
+			i = 2;
+		else if (turno > 16 && turno <= 38)
+			i = 3;
+		else
+			i = 4;
+		return i;
 	}
 
 	private void checkAndShowVictory() {
-		if (computerGHeuristic > 100000) {
-			JOptionPane.showMessageDialog(this, "Perdeu!");
-			this.dispose();
-			Main.main();
-		} else if (humanGHeuristic > 100000) {
-			JOptionPane.showMessageDialog(this, "WINWIN!");
-			this.dispose();
-			Main.main();
+		if (humanGHeuristic > 100000) {
+			JOptionPane.showMessageDialog(this, "Humano ganhou!");
+			restartGame();
+		} else if (computerGHeuristic > 100000) {
+			JOptionPane.showMessageDialog(this, "Computador ganhou!");
+			restartGame();
 		}
+	}
+
+	private void restartGame() {
+		this.dispose();
+		Main.main();
 	}
 
 	public void jogar(int linha, int coluna, boolean computer) {
@@ -246,7 +254,7 @@ public class Board extends JFrame implements ActionListener {
 		} else {
 			humanGHeuristic += heuristic(evaluating);
 		}
-		gHeuristic = (int)((computerGHeuristic - humanGHeuristic) / turno);
+		gHeuristic = (int) ((computerGHeuristic - humanGHeuristic) / turno);
 	}
 
 	private boolean makeEdge(Tile evaluating, Tile iterating, Orientation orientation, int relativePosition) {
