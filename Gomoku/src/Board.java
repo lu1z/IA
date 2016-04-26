@@ -39,6 +39,8 @@ public class Board extends JFrame implements ActionListener {
 
 	Tile lastHplay;
 	Tile lastCPlay;
+	
+	int turno = 1;
 
 	private Container boardContainer;
 	private Label mTimeLabel = new Label();
@@ -119,6 +121,7 @@ public class Board extends JFrame implements ActionListener {
 		if (peca.getBackground() == Color.GRAY) {
 			jogar(linha, coluna, false, true);
 			lastHplay = board[linha][coluna];
+			turno++;
 		}
 
 		this.mTurnLabel.setText("Vez do computador jogar");
@@ -145,6 +148,7 @@ public class Board extends JFrame implements ActionListener {
 					e.printStackTrace();
 				}
 				jogar(jogada[1], jogada[2], true, true);
+				turno++;
 				lastCPlay = board[jogada[1]][jogada[2]];
 
 				working = false;
@@ -242,7 +246,7 @@ public class Board extends JFrame implements ActionListener {
 		} else {
 			humanGHeuristic += heuristic(evaluating);
 		}
-		gHeuristic = computerGHeuristic - humanGHeuristic;
+		gHeuristic = (int)((computerGHeuristic - humanGHeuristic) / turno);
 	}
 
 	private boolean makeEdge(Tile evaluating, Tile iterating, Orientation orientation, int relativePosition) {
